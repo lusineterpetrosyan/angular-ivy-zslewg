@@ -1,0 +1,72 @@
+<ng-container *ngIf="sorted?.length">
+  <button class="stroked" (click)="backTo()">Back to list</button>
+  <br />
+  <div class="content">
+    <h4>Compare two selected agents</h4>
+    <br />
+    <ul class="comparison table-list">
+      <li class="header row">
+        <!-- TODO create array for header -->
+        <ng-container *ngFor="let ag of sorted[0] | keyvalue">
+          <span class="cell"></span>
+          <ng-container *ngFor="let tasksByCat of ag.value | keyvalue; last as isLast">
+            <ng-container *ngIf="tasksByCat.key !== 'avg'">
+              <span class="cell category">{{ tasksByCat.key }}</span>
+              <span class="cell">
+                <ng-container *ngFor="let task of tasksByCat.value">
+                  <span>{{ task.name }}</span>
+                </ng-container>
+                <span class="avg">Avg.</span>
+              </span>
+          </ng-container>
+          </ng-container>
+        </ng-container>
+      </li>
+      <li *ngFor="let agent of sorted" class="row">
+        <ng-container *ngFor="let ag of agent | keyvalue">
+          <span class="cell">{{ ag.key }}</span>
+          <span class="cell category"></span>
+          <ng-container *ngFor="let tasksByCat of ag.value | keyvalue; last as isLast">
+            <ng-container *ngIf="tasksByCat.key !== 'avg'">
+              <span class="cell">
+                <ng-container *ngFor="let task of tasksByCat.value">
+                  <span>{{ task.score }}</span>
+                </ng-container>
+                <ng-container *ngFor="let avg of ag.value['avg']">
+                  <span class="avg" *ngIf="avg.name === tasksByCat.key">{{avg.score}}</span>
+                </ng-container>
+              </span>
+              <span *ngIf="!isLast" class="cell category"></span>
+            </ng-container>
+          </ng-container>
+        </ng-container>
+      </li>
+    </ul>
+  </div>
+  <!-- TODO add chart comparison. Give opportunity to switch from data to chart -->
+  <!-- TODO add chart comparison for expanded data but already on another page. Give opportunity to switch from data to chart -->
+
+<div class="content" >
+  <h4>Chart of avg. score by {{ combined }}</h4>
+  <ng-container *ngIf="combined === 'AI'">
+    <button class="stroked" (click)="combine()">Combine by category</button>
+  </ng-container>
+  <ng-container *ngIf="combined === 'categories'">
+    <button class="stroked" (click)="defaultChart()">Combine by AI</button>
+  </ng-container>
+  <br />
+  <!-- TODO: make Chart component  -->
+  <ngx-charts-bar-vertical-2d
+      [view]="view"
+      [results]="chart"
+      [xAxis]="showXAxis"
+      [yAxis]="showYAxis"
+      [showXAxisLabel]="showXAxisLabel"
+      [showYAxisLabel]="showYAxisLabel"
+      [xAxisLabel]="xAxisLabel"
+      [yAxisLabel]="yAxisLabel"
+      [legendTitle]="legendTitle"
+    >
+    </ngx-charts-bar-vertical-2d>
+  </div>
+</ng-container>

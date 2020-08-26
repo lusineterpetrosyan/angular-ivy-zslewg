@@ -1,0 +1,6 @@
+<ng-container *ngIf="!compareArray?.length">
+	<app-list (compareEvent)=compare($event)></app-list>
+</ng-container>
+<ng-container *ngIf="compareArray?.length">
+	<app-comparison [compareArray]=compareArray (resetCompareEvent)=backTo($event)></app-comparison> 
+</ng-container>
